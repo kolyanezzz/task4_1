@@ -33,12 +33,12 @@ echo "Users logged in: ${#who[*]}"
 echo "--- NETWORK ---"
 for NEWIF in `ip address | awk '/mtu/{print $2}'`
 do
-NEWIP=(`ip address show "${NEWIF[$i]}" | awk '/inet /{print $2}' | xargs`)
+NEWIP=(`ip address show "${NEWIF}" | awk '/inet /{print $2}' | xargs`)
 if [ -z  "$NEWIP" ];
 then
-echo  "${NEWIF[$i]} -"
+echo  "${NEWIF} -"
 else
-echo  "${NEWIF[$i]}" `ip address show "${NEWIF[$i]}" | awk '/inet /{print $2}' | xargs | sed 's/\ /, /g'`
+echo  "${NEWIF}" `ip address show "${NEWIF}" | awk '/inet /{print $2}' | xargs | sed 's/\ /, /g'`
 fi
 done
 }
