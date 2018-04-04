@@ -31,15 +31,14 @@ echo "Processes running: "`ps | sed -n 6p | awk '{print $1}'`
 who=(`who | awk '{print $1}'`)
 echo "Users logged in: ${#who[*]}"
 echo "--- NETWORK ---"
-NEWIF=(`ip address | awk '/mtu/{print $2}'`)
-NEWIP=(`ip address | grep $'inet ' | awk '{print $2}'`)
-for (( i=0 ; i < ${#NEWIF[*]} ; i++ ))
+for NEWIF in `ip address | awk '/mtu/{print $2}'`
 do
-if [ -z  "${NEWIP[$i]// /}" ];
+NEWIP=(`ip address show "${NEWIF[$i]}" | awk '/inet /{print $2}' | xargs`)
+if [ -z  "$NEWIP" ];
 then
-printf  "${NEWIF[$i]} - \n"
+echo  "${NEWIF[$i]} -"
 else
-printf  "${NEWIF[$i]} ${NEWIP[$i]}\n"
+echo  "${NEWIF[$i]}" `ip address show "${NEWIF[$i]}" | awk '/inet /{print $2}' | xargs | sed 's/\ /, /g'`
 fi
 done
 }
